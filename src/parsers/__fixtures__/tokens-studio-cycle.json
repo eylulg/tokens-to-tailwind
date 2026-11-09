@@ -1,0 +1,6 @@
+{
+  "spacing": {
+    "base": { "value": "$spacing.double", "type": "spacing" },
+    "double": { "value": "{spacing.base}", "type": "spacing" }
+  }
+}

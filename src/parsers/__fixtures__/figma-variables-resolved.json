@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "fileName": "Acme Design System",
+  "collections": [
+    {
+      "name": "Primitives",
+      "modes": [{ "modeId": "10:0", "name": "Mode 1" }],
+      "variables": [
+        {
+          "id": "VariableID:10:1",
+          "name": "teal/500",
+          "type": "COLOR",
+          "resolvedValuesByMode": {
+            "10:0": { "resolvedValue": { "r": 0.08235294, "g": 0.71764706, "b": 0.61960784, "a": 1 }, "alias": null }
+          }
+        },
+        {
+          "id": "VariableID:10:2",
+          "name": "teal/300",
+          "type": "COLOR",
+          "resolvedValuesByMode": {
+            "10:0": { "resolvedValue": { "r": 0.36862745, "g": 0.85098039, "b": 0.76470588, "a": 1 }, "alias": null }
+          }
+        },
+        {
+          "id": "VariableID:10:3",
+          "name": "neutral/0",
+          "type": "COLOR",
+          "resolvedValuesByMode": {
+            "10:0": { "resolvedValue": { "r": 1, "g": 1, "b": 1, "a": 1 }, "alias": null }
+          }
+        },
+        {
+          "id": "VariableID:10:4",
+          "name": "neutral/1000",
+          "type": "COLOR",
+          "resolvedValuesByMode": {
+            "10:0": { "resolvedValue": { "r": 0.05098039, "g": 0.05882353, "b": 0.07058824, "a": 1 }, "alias": null }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Theme",
+      "modes": [
+        { "modeId": "11:0", "name": "Light" },
+        { "modeId": "11:1", "name": "Dark" },
+        { "modeId": "11:2", "name": "High contrast" }
+      ],
+      "variables": [
+        {
+          "id": "VariableID:11:1",
+          "name": "surface/default",
+          "type": "COLOR",
+          "resolvedValuesByMode": {
+            "11:0": { "resolvedValue": { "r": 1, "g": 1, "b": 1, "a": 1 }, "alias": "VariableID:10:3", "aliasName": "neutral/0" },
+            "11:1": { "resolvedValue": { "r": 0.05098039, "g": 0.05882353, "b": 0.07058824, "a": 1 }, "alias": "VariableID:10:4", "aliasName": "neutral/1000" },
+            "11:2": { "resolvedValue": { "r": 0, "g": 0, "b": 0, "a": 1 }, "alias": null }
+          }
+        },
+        {
+          "id": "VariableID:11:2",
+          "name": "accent/default",
+          "type": "COLOR",
+          "resolvedValuesByMode": {
+            "11:0": { "resolvedValue": { "r": 0.08235294, "g": 0.71764706, "b": 0.61960784, "a": 1 }, "alias": "VariableID:10:1", "aliasName": "teal/500" },
+            "11:1": { "resolvedValue": { "r": 0.36862745, "g": 0.85098039, "b": 0.76470588, "a": 1 }, "alias": "VariableID:10:2", "aliasName": "teal/300" },
+            "11:2": { "resolvedValue": { "r": 1, "g": 1, "b": 0, "a": 1 }, "alias": null }
+          }
+        },
+        {
+          "id": "VariableID:11:3",
+          "name": "overlay/scrim",
+          "type": "COLOR",
+          "resolvedValuesByMode": {
+            "11:0": { "resolvedValue": { "r": 0, "g": 0, "b": 0, "a": 0.5 }, "alias": null },
+            "11:1": { "resolvedValue": { "r": 0, "g": 0, "b": 0, "a": 0.7 }, "alias": null },
+            "11:2": { "resolvedValue": { "r": 0, "g": 0, "b": 0, "a": 0.9 }, "alias": null }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Layout",
+      "modes": [{ "modeId": "12:0", "name": "Default" }],
+      "variables": [
+        { "id": "VariableID:12:1", "name": "radius/card", "type": "FLOAT", "resolvedValuesByMode": { "12:0": { "resolvedValue": 16, "alias": null } } },
+        { "id": "VariableID:12:2", "name": "space/gutter", "type": "FLOAT", "resolvedValuesByMode": { "12:0": { "resolvedValue": 24, "alias": null } } },
+        { "id": "VariableID:12:3", "name": "font/heading", "type": "STRING", "resolvedValuesByMode": { "12:0": { "resolvedValue": "Space Grotesk", "alias": null } } },
+        { "id": "VariableID:12:4", "name": "font-weight/heading", "type": "FLOAT", "resolvedValuesByMode": { "12:0": { "resolvedValue": 600, "alias": null } } },
+        { "id": "VariableID:12:5", "name": "line-height/heading", "type": "FLOAT", "resolvedValuesByMode": { "12:0": { "resolvedValue": 1.2, "alias": null } } }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "color": {
+    "$type": "color",
+    "brand": { "$value": "#444ce7" },
+    "accent": { "$value": "{color.brnad}" }
+  }
+}

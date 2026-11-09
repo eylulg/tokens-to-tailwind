@@ -1,0 +1,130 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "color": {
+    "$type": "color",
+    "base": {
+      "white": { "$value": "#ffffff" },
+      "black": { "$value": "#000000" }
+    },
+    "gray": {
+      "50": { "$value": "#f9fafb" },
+      "100": { "$value": "#f2f4f7" },
+      "200": { "$value": "#e4e7ec" },
+      "300": { "$value": "#d0d5dd" },
+      "500": { "$value": "#667085" },
+      "700": { "$value": "#344054" },
+      "900": { "$value": "#101828" },
+      "950": { "$value": "#0c111d" }
+    },
+    "brand": {
+      "50": { "$value": "#eef4ff" },
+      "100": { "$value": "#e0eaff" },
+      "300": { "$value": "#a4bcfd" },
+      "500": { "$value": "#6172f3" },
+      "600": { "$value": "#444ce7" },
+      "700": { "$value": "#3538cd" },
+      "900": { "$value": "#2d31a6", "$description": "DTCG 2025 color object" }
+    },
+    "success": {
+      "500": {
+        "$value": { "colorSpace": "srgb", "components": [0.0902, 0.6980, 0.4157], "hex": "#17b26a" }
+      }
+    },
+    "error": {
+      "500": { "$value": "oklch(63.68% 0.2078 25.33)" }
+    },
+    "overlay": { "$value": "rgb(12 17 29 / 0.7)" }
+  },
+  "semantic": {
+    "$type": "color",
+    "bg": {
+      "primary": {
+        "$value": "{color.base.white}",
+        "$extensions": { "mode": { "light": "{color.base.white}", "dark": "{color.gray.950}" } }
+      },
+      "brand-solid": {
+        "$value": "{color.brand.600}",
+        "$extensions": { "mode": { "light": "{color.brand.600}", "dark": "{color.brand.500}" } }
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": "{color.gray.900}",
+        "$extensions": { "mode": { "light": "{color.gray.900}", "dark": "{color.gray.50}" } }
+      },
+      "secondary": {
+        "$value": "{color.gray.700}",
+        "$extensions": { "mode": { "light": "{color.gray.700}", "dark": "{color.gray.300}" } }
+      }
+    },
+    "border": {
+      "primary": {
+        "$value": "{color.gray.300}",
+        "$extensions": { "mode": { "dark": "{color.gray.700}" } }
+      }
+    }
+  },
+  "spacing": {
+    "$type": "dimension",
+    "xs": { "$value": { "value": 4, "unit": "px" } },
+    "sm": { "$value": { "value": 8, "unit": "px" } },
+    "md": { "$value": { "value": 12, "unit": "px" } },
+    "lg": { "$value": { "value": 16, "unit": "px" } },
+    "xl": { "$value": { "value": 1.5, "unit": "rem" } }
+  },
+  "radius": {
+    "$type": "dimension",
+    "sm": { "$value": "6px" },
+    "md": { "$value": "8px" },
+    "lg": { "$value": "12px" },
+    "full": { "$value": "9999px" }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "body": { "$value": ["Inter", "-apple-system", "Segoe UI", "sans-serif"] },
+      "display": { "$value": "{font.family.body}" },
+      "mono": { "$value": ["JetBrains Mono", "ui-monospace", "monospace"] }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": { "$value": 400 },
+      "semibold": { "$value": "semi-bold" },
+      "bold": { "$value": 700 }
+    }
+  },
+  "typography": {
+    "$type": "typography",
+    "text-md": {
+      "$value": {
+        "fontFamily": "{font.family.body}",
+        "fontSize": { "value": 16, "unit": "px" },
+        "fontWeight": "{font.weight.regular}",
+        "lineHeight": 1.5
+      }
+    },
+    "display-sm": {
+      "$value": {
+        "fontFamily": "{font.family.display}",
+        "fontSize": { "value": 30, "unit": "px" },
+        "fontWeight": "{font.weight.semibold}",
+        "lineHeight": 1.2667
+      }
+    }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "xs": {
+      "$value": { "color": "#1018280d", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px" }
+    },
+    "lg": {
+      "$value": [
+        { "color": "#10182814", "offsetX": "0px", "offsetY": "12px", "blur": "16px", "spread": "-4px" },
+        { "color": "#10182808", "offsetX": "0px", "offsetY": "4px", "blur": "6px", "spread": "-2px" }
+      ]
+    }
+  },
+  "motion": {
+    "duration": { "$type": "duration", "fast": { "$value": { "value": 100, "unit": "ms" } } }
+  }
+}

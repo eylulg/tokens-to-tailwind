@@ -1,0 +1,14 @@
+{
+  "variableCollections": [
+    { "id": "VariableCollectionId:1:1", "name": "Tokens", "modes": [{ "modeId": "1:0", "name": "Default" }] }
+  ],
+  "variables": [
+    {
+      "id": "VariableID:1:2",
+      "name": "button/bg",
+      "resolvedType": "COLOR",
+      "variableCollectionId": "VariableCollectionId:1:1",
+      "valuesByMode": { "1:0": { "type": "VARIABLE_ALIAS", "id": "VariableID:9:9" } }
+    }
+  ]
+}
