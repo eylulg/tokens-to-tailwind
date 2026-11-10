@@ -21,9 +21,19 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 24
-                  cache: npm
-            - run: npm ci
+                  node-version-file: .nvmrc
+            - uses: actions/checkout@v4
+              with:
+                  repository: eylulg/ui
+                  path: ui-src
+            - name: Build @eylulg/ui
+              working-directory: ui-src
+              run: |
+                  npm ci
+                  npm run build
+            - name: Link the checked out library
+              # package.json says file:../ui for local work; CI cannot reach a sibling folder.
+              run: npm install --no-audit --no-fund ./ui-src
             - run: npm test
             - run: npm run build
             - uses: actions/configure-pages@v5

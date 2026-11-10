@@ -17,18 +17,46 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
             - uses: actions/setup-node@v4
               with:
-                  node-version: 24
-                  cache: npm
-            - run: npm ci
+                  node-version-file: .nvmrc
+            - uses: actions/checkout@v4
+              with:
+                  repository: eylulg/ui
+                  path: ui-src
+            - name: Build @eylulg/ui
+              working-directory: ui-src
+              run: |
+                  npm ci
+                  npm run build
+            - name: Link the checked out library
+              # package.json says file:../ui for local work; CI cannot reach a sibling folder.
+              run: npm install --no-audit --no-fund ./ui-src
             - name: Typecheck
               run: npm run typecheck
             - name: Lint
               run: npm run lint
             - name: Format
               run: npm run format:check
+            - name: Unused files, exports and dependencies
+              run: npm run knip
+            - name: Commit messages
+              if: github.event_name == 'pull_request'
+              run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
             - name: Test
               run: npm test
             - name: Build
               run: npm run build
+
+    secrets:
+        name: Secret scan
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: gitleaks/gitleaks-action@v2
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
