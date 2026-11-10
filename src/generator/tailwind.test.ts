@@ -72,13 +72,11 @@ describe("toTailwindTheme mapping", () => {
         ]);
     });
 
-    it("emits a .dark-mode block inside @layer base only when there are dark tokens", () => {
+    it("emits an unlayered .dark-mode block only when there are dark tokens", () => {
         const light = [color("bg.primary", "#ffffff", { mode: "light" })];
-        expect(toTailwindTheme(light)).not.toContain(".dark-mode {");
+        expect(toTailwindTheme(light)).not.toContain("\n.dark-mode {");
         const both = [...light, color("bg.primary", "#0c111d", { mode: "dark" })];
-        expect(toTailwindTheme(both)).toMatch(
-            /@layer base \{\n {4}\.dark-mode \{\n {8}\/\* Colors \*\/\n {8}--color-bg-primary: oklch\(#0c111d\);/,
-        );
+        expect(toTailwindTheme(both)).toMatch(/\n\.dark-mode \{\n {4}\/\* Colors \*\/\n {4}--color-bg-primary: oklch\(#0c111d\);/);
     });
 
     it("puts dark-only tokens in @theme too, so Tailwind creates the utility", () => {

@@ -9,7 +9,7 @@ import { Tab, TabList, TabPanel, Tabs } from "@eylulg/ui/tabs";
 import { Mail } from "lucide-react";
 import type { Token } from "@/model/tokens";
 import { useAppStore } from "@/store/use-app-store";
-import { buildPreviewCss } from "./preview-css";
+import { buildPreview } from "./preview-css";
 
 export function PreviewTab({ tokens }: { tokens: Token[] }) {
     const naming = useAppStore((s) => s.naming);
@@ -19,13 +19,17 @@ export function PreviewTab({ tokens }: { tokens: Token[] }) {
     const scopeId = `preview-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
     const hasDark = tokens.some((t) => t.mode === "dark");
 
-    const css = useMemo(() => buildPreviewCss(tokens, `#${scopeId}`, { naming, colorFormat }), [tokens, scopeId, naming, colorFormat]);
+    const { css, notes } = useMemo(
+        () => buildPreview(tokens, `#${scopeId}`, { naming, colorFormat }),
+        [tokens, scopeId, naming, colorFormat],
+    );
 
     return (
         <div className="flex flex-col gap-4 pt-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="max-w-prose text-sm text-tertiary">
                     Library components rendered with the generated variables, scoped to this panel only.
+                    {notes.length > 0 && ` Mapped to library roles: ${notes.join(", ")}.`}
                     {!hasDark && " These tokens have no dark set, so dark mode falls back to the library defaults."}
                 </p>
                 <Switch isSelected={previewDark} onChange={setPreviewDark}>

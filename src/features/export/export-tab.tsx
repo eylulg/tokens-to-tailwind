@@ -21,11 +21,11 @@ function download(text: string, fileName: string, mime: string) {
 }
 
 export function ExportTab({ result }: { result: ParseResult }) {
-    const { naming, colorFormat, preserveAliases, exportFormat } = useAppStore();
-    const { setNaming, setColorFormat, setPreserveAliases, setExportFormat } = useAppStore();
+    const { naming, colorFormat, preserveAliases, mapRoles, exportFormat } = useAppStore();
+    const { setNaming, setColorFormat, setPreserveAliases, setMapRoles, setExportFormat } = useAppStore();
     const output = useMemo(
-        () => renderExport(exportFormat, result.tokens, { naming, colorFormat, preserveAliases, source: result.format }),
-        [exportFormat, result, naming, colorFormat, preserveAliases],
+        () => renderExport(exportFormat, result.tokens, { naming, colorFormat, preserveAliases, mapRoles, source: result.format }),
+        [exportFormat, result, naming, colorFormat, preserveAliases, mapRoles],
     );
     const file = EXPORT_FILES[exportFormat];
     const isEmpty = result.tokens.length === 0;
@@ -65,6 +65,9 @@ export function ExportTab({ result }: { result: ParseResult }) {
                     </RadioGroup>
                     <Checkbox isSelected={preserveAliases} onChange={setPreserveAliases} isDisabled={exportFormat === "json"}>
                         Keep aliases as var()
+                    </Checkbox>
+                    <Checkbox isSelected={mapRoles} onChange={setMapRoles} isDisabled={exportFormat !== "tailwind"}>
+                        Map names to @eylulg/ui roles
                     </Checkbox>
                 </div>
             </div>

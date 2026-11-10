@@ -8,6 +8,8 @@ import type { ParseResult } from "@/model/tokens";
 import { FORMAT_LABELS, countTokens } from "@/model/tokens";
 import { useAppStore } from "@/store/use-app-store";
 
+const tokenCount = (count: number) => (count === 1 ? "1 token" : `${count} tokens`);
+
 const ACCEPTED_TYPES = [".json", "application/json", "text/plain"];
 
 function statusMessage(result: ParseResult, hasSource: boolean): string {
@@ -17,7 +19,7 @@ function statusMessage(result: ParseResult, hasSource: boolean): string {
         return `${count}. ${result.errors[0]?.message ?? ""}`;
     }
     const format = result.format ? FORMAT_LABELS[result.format] : "Unknown format";
-    return `${format} detected, ${countTokens(result.tokens)} tokens parsed.`;
+    return `${format} detected, ${tokenCount(countTokens(result.tokens))} parsed.`;
 }
 
 export function InputPanel({ result }: { result: ParseResult }) {
@@ -81,7 +83,7 @@ export function InputPanel({ result }: { result: ParseResult }) {
                 ) : (
                     <Badge>{source.trim() ? "Not recognised" : "Waiting for input"}</Badge>
                 )}
-                {result.format && <Badge>{countTokens(result.tokens)} tokens</Badge>}
+                {result.format && <Badge>{tokenCount(countTokens(result.tokens))}</Badge>}
             </div>
 
             <p role="status" className="sr-only">

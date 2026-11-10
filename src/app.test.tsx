@@ -85,7 +85,7 @@ describe("App", () => {
         const code = await screen.findByRole("group", { name: "Generated theme.css" });
         expect(code).toHaveTextContent("@theme {");
         expect(code).toHaveTextContent("--color-brand-600: oklch(57.2% 0.2076 258.93);");
-        expect(code).toHaveTextContent("@layer base { .dark-mode {");
+        expect(code).toHaveTextContent(".dark-mode {");
 
         await user.click(screen.getByRole("button", { name: "Copy theme.css" }));
         expect(await screen.findByText("theme.css copied to the clipboard")).toBeInTheDocument();
