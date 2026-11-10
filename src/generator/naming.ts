@@ -19,11 +19,11 @@ export const NAMESPACE_BY_TYPE: Record<TokenType, Namespace> = {
 const REDUNDANT: Record<Namespace, string[]> = {
     color: ["color", "colors", "colour", "colours"],
     spacing: ["spacing", "space", "spaces", "size", "sizes", "sizing", "dimension", "dimensions"],
-    radius: ["radius", "radii", "border-radius", "rounded", "corner", "corners"],
+    radius: ["radius", "radii", "border-radius", "rounded", "corner", "corners", "dimension", "dimensions"],
     font: ["font-family", "font-families", "families", "family", "typeface", "fonts", "font", "typography"],
     text: ["font-size", "font-sizes", "text", "typography", "sizes", "size", "font"],
     "font-weight": ["font-weight", "font-weights", "weights", "weight", "font", "typography"],
-    leading: ["line-height", "line-heights", "leading", "typography"],
+    leading: ["line-height", "line-heights", "leading", "typography", "font", "fonts"],
     shadow: ["box-shadow", "shadows", "shadow", "elevation"],
 };
 

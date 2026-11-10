@@ -1,0 +1,199 @@
+{
+  "$schema": "https://tr.designtokens.org/format/",
+  "color": {
+    "$type": "color",
+    "$description": "Primitive palette, generated from Figma",
+    "base": {
+      "white": { "$value": "#ffffff" },
+      "black": { "$value": "#000000" },
+      "transparent": { "$value": "rgba(0, 0, 0, 0)" }
+    },
+    "violet": {
+      "50": { "$value": "#f5f3ff" },
+      "100": { "$value": "#ede9fe" },
+      "300": { "$value": "#c4b5fd" },
+      "500": { "$value": "#8b5cf6" },
+      "600": { "$value": { "colorSpace": "srgb", "components": [0.486, 0.227, 0.929], "alpha": 1, "hex": "#7c3aed" } },
+      "700": { "$value": "#6d28d9" },
+      "900": { "$value": "oklch(32% 0.14 293)" }
+    },
+    "slate": {
+      "50": { "$value": "#f8fafc" },
+      "200": { "$value": "#e2e8f0" },
+      "500": { "$value": "#64748b" },
+      "700": { "$value": "#334155" },
+      "900": { "$value": "#0f172a" },
+      "950": { "$value": "#020617" }
+    },
+    "green": { "600": { "$value": "#16a34a" } },
+    "red": { "600": { "$value": "#dc2626" }, "500": { "$value": "hsl(0 84% 60%)" } },
+    "brand": {
+      "$description": "Points at the violet scale so the hue can move in one place",
+      "primary": { "$value": "{color.violet.600}" },
+      "primary-hover": { "$value": "{color.violet.700}" },
+      "primary-subtle": { "$value": "{color.violet.50}" },
+      "on-primary": { "$value": "{color.base.white}" }
+    }
+  },
+  "semantic": {
+    "$type": "color",
+    "bg": {
+      "canvas": {
+        "$value": "{color.base.white}",
+        "$extensions": { "mode": { "light": "{color.base.white}", "dark": "{color.slate.950}" } }
+      },
+      "surface": {
+        "$value": "{color.slate.50}",
+        "$extensions": { "mode": { "light": "{color.slate.50}", "dark": "{color.slate.900}" } }
+      },
+      "accent": {
+        "$value": "{color.brand.primary}",
+        "$extensions": { "mode": { "dark": "{color.violet.500}" } }
+      }
+    },
+    "text": {
+      "default": {
+        "$value": "{color.slate.900}",
+        "$extensions": { "mode": { "light": "{color.slate.900}", "dark": "{color.slate.50}" } }
+      },
+      "muted": {
+        "$value": "{color.slate.500}",
+        "$extensions": { "mode": { "light": "{color.slate.500}", "dark": "{color.slate.200}" } }
+      },
+      "on-accent": { "$value": "{color.brand.on-primary}" },
+      "link": { "$value": "{semantic.bg.accent}" }
+    },
+    "border": {
+      "default": {
+        "$value": "{color.slate.200}",
+        "$extensions": { "mode": { "light": "{color.slate.200}", "dark": "{color.slate.700}" } }
+      },
+      "focus": { "$value": "{color.brand.primary}" }
+    },
+    "status": {
+      "success": { "$value": "{color.green.600}" },
+      "danger": { "$value": "{color.red.600}" },
+      "danger-text": { "$value": "{color.red.500}" },
+      "broken": { "$value": "{color.red.400}" }
+    }
+  },
+  "dimension": {
+    "$type": "dimension",
+    "space": {
+      "0": { "$value": "0px" },
+      "1": { "$value": { "value": 4, "unit": "px" } },
+      "2": { "$value": { "value": 8, "unit": "px" } },
+      "3": { "$value": "12px" },
+      "4": { "$value": "16px" },
+      "6": { "$value": "24px" },
+      "8": { "$value": "2rem" },
+      "gutter": { "$value": "{dimension.space.4}" },
+      "page-max": { "$value": "72rem" }
+    },
+    "radius": {
+      "sm": { "$value": "4px" },
+      "md": { "$value": "8px" },
+      "lg": { "$value": "12px" },
+      "pill": { "$value": "9999px" },
+      "card": { "$value": "{dimension.radius.lg}" }
+    },
+    "border-width": {
+      "thin": { "$value": "1px" },
+      "thick": { "$value": { "value": 2, "unit": "px" } }
+    },
+    "icon": {
+      "sm": { "$value": "16px" },
+      "md": { "$value": "20px" }
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "sans": { "$value": ["Inter", "Segoe UI", "sans-serif"] },
+      "mono": { "$value": "JetBrains Mono" },
+      "display": { "$value": "{font.family.sans}" }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": { "$value": 400 },
+      "medium": { "$value": "medium" },
+      "semibold": { "$value": 600 },
+      "bold": { "$value": "bold" }
+    },
+    "size": {
+      "$type": "dimension",
+      "xs": { "$value": "0.75rem" },
+      "sm": { "$value": "0.875rem" },
+      "md": { "$value": "1rem" },
+      "lg": { "$value": "1.125rem" },
+      "xl": { "$value": "1.25rem" },
+      "2xl": { "$value": "1.5rem" }
+    },
+    "line-height": {
+      "$type": "number",
+      "tight": { "$value": 1.2 },
+      "normal": { "$value": 1.5 },
+      "xs": { "$value": 1.5 },
+      "md": { "$value": 1.5 }
+    },
+    "letter-spacing": {
+      "$type": "dimension",
+      "tight": { "$value": "-0.01em" }
+    }
+  },
+  "typography": {
+    "$type": "typography",
+    "heading-lg": {
+      "$value": {
+        "fontFamily": "{font.family.display}",
+        "fontSize": "{font.size.2xl}",
+        "fontWeight": "{font.weight.semibold}",
+        "lineHeight": "{font.line-height.tight}",
+        "letterSpacing": "{font.letter-spacing.tight}"
+      }
+    },
+    "body": {
+      "$value": {
+        "fontFamily": "{font.family.sans}",
+        "fontSize": "{font.size.md}",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "sm": { "$value": { "color": "rgba(2, 6, 23, 0.08)", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px" } },
+    "md": {
+      "$value": [
+        { "color": "{color.slate.950}", "offsetX": "0px", "offsetY": "4px", "blur": "8px", "spread": "-2px" },
+        { "color": "rgba(2, 6, 23, 0.06)", "offsetX": "0px", "offsetY": "2px", "blur": "4px", "spread": "-2px" }
+      ]
+    },
+    "focus": { "$value": { "color": "{semantic.border.focus}", "offsetX": "0px", "offsetY": "0px", "blur": "0px", "spread": "3px" } }
+  },
+  "motion": {
+    "duration": {
+      "$type": "duration",
+      "fast": { "$value": "150ms" },
+      "slow": { "$value": { "value": 400, "unit": "ms" } }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "standard": { "$value": [0.2, 0, 0, 1] }
+    }
+  },
+  "border": {
+    "$type": "border",
+    "default": { "$value": { "color": "{semantic.border.default}", "width": "{dimension.border-width.thin}", "style": "solid" } }
+  },
+  "opacity": {
+    "$type": "number",
+    "disabled": { "$value": 0.5 }
+  },
+  "Legacy Tokens": {
+    "$type": "color",
+    "Primary Blue": { "$value": "#1d4ed8" },
+    "primary.blue": { "$value": "#1e40af" }
+  }
+}

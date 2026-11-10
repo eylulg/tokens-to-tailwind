@@ -56,3 +56,21 @@ describe("parseTokensStudio", () => {
         expect(cyclic.errors[0]?.message).toContain("spacing.base -> spacing.double -> spacing.base");
     });
 });
+
+describe("parseTokensStudio math", () => {
+    it("reports an expression it cannot evaluate once, without errors on the tokens that use it", () => {
+        const result = parseTokensStudio({
+            spacing: {
+                base: { value: "4", type: "spacing" },
+                odd: { value: "roundTo({spacing.base} * 2.5, 0)", type: "spacing" },
+                wide: { value: "{spacing.odd}", type: "spacing" },
+                wider: { value: "{spacing.wide}", type: "spacing" },
+                sum: { value: "{spacing.base} + 8px", type: "spacing" },
+            },
+        });
+
+        expect(result.errors).toEqual([]);
+        expect(result.warnings.map((w) => w.path)).toEqual(["spacing.odd"]);
+        expect(result.tokens.find((t) => t.name === "spacing.sum")?.value).toBe("12px");
+    });
+});

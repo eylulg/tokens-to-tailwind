@@ -1,4 +1,4 @@
-const files = import.meta.glob<string>(["./*.json", "./*.txt"], { query: "?raw", import: "default", eager: true });
+const files = import.meta.glob<string>(["./*.json", "./*.txt", "./real-world/*.json"], { query: "?raw", import: "default", eager: true });
 
 /** Reads a fixture file as text. Test-only helper. */
 export function fixture(name: string): string {

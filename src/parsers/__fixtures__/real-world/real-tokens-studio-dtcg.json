@@ -1,0 +1,19 @@
+{
+  "core": {
+    "color": {
+      "violet": { "600": { "$value": "#7c3aed", "$type": "color" } },
+      "neutral": { "50": { "$value": "#fafafa", "$type": "color" }, "900": { "$value": "#171717", "$type": "color" } }
+    },
+    "spacing": { "base": { "$value": "4", "$type": "spacing" }, "md": { "$value": "{spacing.base} * 4", "$type": "spacing" } }
+  },
+  "semantic/light": {
+    "bg": { "canvas": { "$value": "{color.neutral.50}", "$type": "color" } },
+    "text": { "accent": { "$value": "{color.violet.600}", "$type": "color" } }
+  },
+  "semantic/dark": {
+    "bg": { "canvas": { "$value": "{color.neutral.900}", "$type": "color" } },
+    "text": { "accent": { "$value": "{color.violet.600}", "$type": "color" } }
+  },
+  "$themes": [],
+  "$metadata": { "tokenSetOrder": ["core", "semantic/light", "semantic/dark"] }
+}

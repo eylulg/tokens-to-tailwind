@@ -116,16 +116,24 @@ function planModes(collection: FigmaCollection, issues: Issues, warned: Set<stri
     return [{ mode: first, as: undefined }];
 }
 
+const SIZE_ROLE = /size|sizing|dimension|width|height|spacing|space|gap|padding|margin|inset|stroke|border|icon/i;
+
 function figmaType(variable: FigmaVariable, path: string[]): string | null {
     const hintPath = [variable.collection.name, ...path];
     switch (variable.type) {
         case "COLOR":
             return "color";
         case "FLOAT":
-        case "NUMBER":
-            return classifyByPath(hintPath, "dimension");
-        case "STRING":
-            return classifyByPath(hintPath, "dimension") === "fontFamily" || /font|family/i.test(path.join("/")) ? "fontFamily" : null;
+        case "NUMBER": {
+            const type = classifyByPath(hintPath, "dimension");
+            // A bare number such as `Grid/columns` is a count, not a length.
+            return type === "dimension" && !SIZE_ROLE.test(hintPath.join("/")) ? null : type;
+        }
+        case "STRING": {
+            const type = classifyByPath(hintPath, "dimension");
+            if (type === "fontWeight" || type === "fontFamily") return type;
+            return type === "dimension" && /font|family/i.test(path.join("/")) ? "fontFamily" : null;
+        }
         default:
             return null;
     }
@@ -162,7 +170,10 @@ export function parseFigma(json: unknown): ParseResult {
         if (!type) {
             issues.warnings.push({
                 code: "UNSUPPORTED",
-                message: `${path.join(".")}: ${variable.type.toLowerCase()} variables are not supported, skipped`,
+                message:
+                    variable.type === "FLOAT" || variable.type === "NUMBER"
+                        ? `${path.join(".")}: number has no recognisable role (size, spacing, radius, font), skipped`
+                        : `${path.join(".")}: ${variable.type.toLowerCase()} variables are not supported, skipped`,
                 path: path.join("."),
             });
             continue;

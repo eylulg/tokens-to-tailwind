@@ -32,8 +32,12 @@ function normaliseDollarAlias(value: unknown): unknown {
     return value;
 }
 
-function isToken(node: Record<string, unknown>): boolean {
-    return "value" in node && typeof node.type === "string";
+/** Tokens Studio writes `value` and `type`; since 2024 it writes `$value` and `$type` by default. */
+function readToken(node: Record<string, unknown>): { value: unknown; type: string } | null {
+    const type = typeof node.$type === "string" ? node.$type : node.type;
+    const value = "$value" in node ? node.$value : node.value;
+    if (typeof type !== "string" || (!("$value" in node) && !("value" in node))) return null;
+    return { value, type };
 }
 
 /**
@@ -49,9 +53,9 @@ export function parseTokensStudio(json: unknown): ParseResult {
     if (!isPlainObject(json)) return { format: "tokens-studio", tokens: [], ...issues };
 
     const walk = (node: Record<string, unknown>, path: string[], mode: Mode | undefined) => {
-        if (isToken(node)) {
-            const rawType = node.type as string;
-            entries.push({ path, type: TYPE_MAP[rawType] ?? rawType, value: normaliseDollarAlias(node.value), mode });
+        const token = readToken(node);
+        if (token) {
+            entries.push({ path, type: TYPE_MAP[token.type] ?? token.type, value: normaliseDollarAlias(token.value), mode });
             return;
         }
         for (const [key, child] of Object.entries(node)) {
@@ -73,6 +77,6 @@ export function parseTokensStudio(json: unknown): ParseResult {
         walk(json, [], undefined);
     }
 
-    const tokens = buildTokens(entries, issues);
+    const tokens = buildTokens(entries, issues, { math: true });
     return { format: "tokens-studio", tokens, ...issues };
 }

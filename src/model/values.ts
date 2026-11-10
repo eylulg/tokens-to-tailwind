@@ -11,6 +11,8 @@ export function classifyByPath(path: string[], fallback: TokenType): TokenType {
     if (/line-?height|leading/.test(joined)) return "lineHeight";
     if (/font-?weight|(^|\/)weight/.test(joined)) return "fontWeight";
     if (/font-?size|text-?size|(^|\/)font-?sizes?(\/|$)/.test(joined)) return "fontSize";
+    // `font.size.md` and `typography.size.md`: the group names the font, the next segment the size.
+    if (/(^|\/)(fonts?|typography|type|text)\/([^/]+\/)*sizes?(\/|$)/.test(joined)) return "fontSize";
     if (/font-?famil|typeface/.test(joined)) return "fontFamily";
     if (/(^|\/)(spacing|space|spaces|gap|padding|margin|inset)(\/|-|$)/.test(joined)) return "spacing";
     if (/shadow|elevation/.test(joined)) return "shadow";
@@ -47,13 +49,20 @@ export function toDimension(value: unknown): string | null {
     return null;
 }
 
-/** Line heights keep unitless numbers (a multiplier) and accept percentages and dimensions. */
+/** Above this a unitless line height cannot be a multiplier: Figma and Tokens Studio mean pixels. */
+const MAX_LINE_HEIGHT_MULTIPLIER = 4;
+
+function unitlessLineHeight(value: number): string {
+    return value > MAX_LINE_HEIGHT_MULTIPLIER ? `${formatNumber(value)}px` : formatNumber(value);
+}
+
+/** Line heights keep small unitless numbers (a multiplier), read large ones as px, and accept percentages and dimensions. */
 export function toLineHeight(value: unknown): string | null {
-    if (typeof value === "number" && Number.isFinite(value)) return formatNumber(value);
+    if (typeof value === "number" && Number.isFinite(value)) return unitlessLineHeight(value);
     if (typeof value === "string") {
         const trimmed = value.trim();
         if (/^auto$|^normal$/i.test(trimmed)) return "normal";
-        if (/^\d*\.?\d+$/.test(trimmed)) return trimmed;
+        if (/^\d*\.?\d+$/.test(trimmed)) return unitlessLineHeight(Number(trimmed));
         return toDimension(trimmed);
     }
     return toDimension(value);
@@ -93,7 +102,7 @@ export function toFontWeight(value: unknown): string | null {
     return null;
 }
 
-const GENERIC_FAMILIES = new Set([
+export const GENERIC_FAMILIES = new Set([
     "serif",
     "sans-serif",
     "monospace",

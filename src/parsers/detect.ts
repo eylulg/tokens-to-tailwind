@@ -17,9 +17,10 @@ export function detectFormat(json: unknown): SourceFormat | null {
         return "figma";
     }
 
-    if (someLeaf(json, (obj) => "$value" in obj)) return "w3c";
-
+    // Tokens Studio now writes `$value` and `$type` too, so its set metadata decides before the W3C check.
     if ("$themes" in json || "$metadata" in json) return "tokens-studio";
+
+    if (someLeaf(json, (obj) => "$value" in obj)) return "w3c";
     if (someLeaf(json, (obj) => "value" in obj && typeof obj.type === "string")) return "tokens-studio";
 
     return null;
