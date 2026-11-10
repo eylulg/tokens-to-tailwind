@@ -20,7 +20,7 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "knip": "knip",
-        "relink": "npm install ../ui --install-links",
+        "relink": "rm -rf node_modules/@eylulg/ui && npm install ../ui --install-links",
         "prepare": "husky"
     },
     "dependencies": {
