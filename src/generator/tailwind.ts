@@ -173,13 +173,13 @@ function header(source: SourceFormat | null | undefined): string {
 
 /**
  * Generates a Tailwind CSS 4 `theme.css`: an `@theme` block plus, when the tokens
- * have dark values, a `.dark-mode` override inside `@layer base` (the Untitled UI convention).
+ * have dark values, a `.dark-mode` override inside `@layer base`.
  */
 export function toTailwindTheme(tokens: Token[], options: ThemeOptions = {}): string {
     const plan = planTheme(tokens, options);
     const parts = [
         header(options.source),
-        '/* Import after @import "tailwindcss". Outside Untitled UI, also add:\n   @custom-variant dark (&:where(.dark-mode, .dark-mode *)); */',
+        '/* Targets Tailwind 4. Works with @eylulg/ui or any Tailwind 4 project.\n   Import after @import "tailwindcss". Without @eylulg/ui, also add:\n   @custom-variant dark (&:where(.dark-mode, .dark-mode *)); */',
         "",
         "@theme {",
         renderBlock(plan.base, "    ", true),
