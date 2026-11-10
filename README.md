@@ -162,7 +162,7 @@ Needs Node 20.19 or newer (CI uses Node 24).
 `@eylulg/ui` is a `file:../ui` dependency until it is published: clone [eylulg/ui](https://github.com/eylulg/ui) next to this
 folder and run `npm install && npm run build` in it before `npm install` here. CI checks the library out into `ui-src`, builds it and
 installs it from there. Once the package is on npm the dependency becomes `^1.0.0`; the GitHub Pages and Vercel deploys need that
-publish to build without the checkout.
+publish to build without the checkout. Locally the library is installed as a copy (`npm install ../ui --install-links`), so run `npm run relink` after rebuilding it.
 
 ```sh
 npm install
