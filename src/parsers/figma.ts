@@ -104,14 +104,16 @@ function planModes(collection: FigmaCollection, issues: Issues, warned: Set<stri
         }
         return mapped;
     }
+    const [first] = collection.modes;
+    if (!first) return [];
     if (!warned.has(collection.name)) {
         warned.add(collection.name);
         issues.warnings.push({
             code: "UNSUPPORTED",
-            message: `Collection "${collection.name}": modes are not named light or dark, only "${collection.modes[0].name}" was used`,
+            message: `Collection "${collection.name}": modes are not named light or dark, only "${first.name}" was used`,
         });
     }
-    return [{ mode: collection.modes[0], as: undefined }];
+    return [{ mode: first, as: undefined }];
 }
 
 function figmaType(variable: FigmaVariable, path: string[]): string | null {

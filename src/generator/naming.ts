@@ -42,7 +42,7 @@ export function cleanSegments(path: string[], namespace: Namespace): string[] {
     const redundant = REDUNDANT[namespace];
     let segments = path.map(kebab).filter(Boolean);
 
-    while (segments.length > 1 && redundant.includes(segments[0])) segments = segments.slice(1);
+    while (segments.length > 1 && redundant.includes(segments[0] ?? "")) segments = segments.slice(1);
 
     // "spacing-md" inside a spacing group becomes "md"; longest prefixes are listed first.
     const first = segments[0];
@@ -56,7 +56,7 @@ export function cleanSegments(path: string[], namespace: Namespace): string[] {
     // "text" followed by "text-primary" repeats itself: keep only "text-primary".
     segments = segments.filter((segment, i) => !segments[i + 1]?.startsWith(`${segment}-`));
 
-    if (segments.length > 1 && /^(default|base|DEFAULT)$/.test(segments[segments.length - 1])) segments = segments.slice(0, -1);
+    if (segments.length > 1 && /^(default|base|DEFAULT)$/.test(segments.at(-1) ?? "")) segments = segments.slice(0, -1);
     return segments.length ? segments : ["default"];
 }
 
@@ -80,7 +80,7 @@ export function nameTokens(tokens: Token[], namespace: Namespace, naming: Naming
     const all = [...distinct.entries()];
     for (const [name, segments] of all) {
         // A bare scale step such as "500" says nothing on its own, so keep its parent ("gray-500").
-        let length = segments.length > 1 && /^\d+(_\d+)?$/.test(segments[segments.length - 1]) ? 2 : 1;
+        let length = segments.length > 1 && /^\d+(_\d+)?$/.test(segments.at(-1) ?? "") ? 2 : 1;
         while (length < segments.length) {
             const suffix = segments.slice(-length).join("-");
             const clash = all.some(([other, otherSegments]) => other !== name && otherSegments.slice(-length).join("-") === suffix);

@@ -9,7 +9,7 @@ describe("parseFigma (valuesByMode, plugin and REST shape)", () => {
     it("parses without errors and skips boolean variables with a warning", () => {
         expect(result.errors).toEqual([]);
         expect(result.warnings).toHaveLength(1);
-        expect(result.warnings[0].message).toContain("boolean variables are not supported");
+        expect(result.warnings[0]?.message).toContain("boolean variables are not supported");
     });
 
     it("converts 0 to 1 RGBA channels to hex and oklch", () => {
@@ -37,7 +37,7 @@ describe("parseFigma (valuesByMode, plugin and REST shape)", () => {
         const broken = parseTokens(fixture("figma-unresolved-alias.json"));
         expect(broken.format).toBe("figma");
         expect(broken.errors.map((e) => e.code)).toEqual(["UNRESOLVED_ALIAS"]);
-        expect(broken.errors[0].message).toContain("VariableID:9:9");
+        expect(broken.errors[0]?.message).toContain("VariableID:9:9");
     });
 
     it("detects alias cycles between variables", () => {
@@ -104,6 +104,6 @@ describe("parseFigma (nested collections with resolvedValuesByMode)", () => {
             ],
         });
         expect(devices.tokens).toEqual([{ name: "spacing.page", path: ["spacing", "page"], type: "spacing", value: "32px" }]);
-        expect(devices.warnings[0].message).toContain('only "Desktop" was used');
+        expect(devices.warnings[0]?.message).toContain('only "Desktop" was used');
     });
 });

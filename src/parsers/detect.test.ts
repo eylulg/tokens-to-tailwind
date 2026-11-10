@@ -29,8 +29,8 @@ describe("parseTokens", () => {
         expect(result.format).toBeNull();
         expect(result.tokens).toEqual([]);
         expect(result.errors).toHaveLength(1);
-        expect(result.errors[0].code).toBe("INVALID_JSON");
-        expect(result.errors[0].message).toMatch(/^The input is not valid JSON: /);
+        expect(result.errors[0]?.code).toBe("INVALID_JSON");
+        expect(result.errors[0]?.message).toMatch(/^The input is not valid JSON: /);
     });
 
     it("reports an unknown format", () => {

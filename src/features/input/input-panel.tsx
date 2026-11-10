@@ -1,32 +1,20 @@
 import { Badge } from "@eylulg/ui/badge";
 import { Button } from "@eylulg/ui/button";
-import { cx } from "@eylulg/ui/cx";
+import { FileDropZone } from "@eylulg/ui/file-drop-zone";
 import { Textarea } from "@eylulg/ui/textarea";
-import { CircleAlert, TriangleAlert, Upload } from "lucide-react";
-import type { DropZoneProps as AriaDropZoneProps } from "react-aria-components";
-import { DropZone as AriaDropZone, FileTrigger as AriaFileTrigger, Text as AriaText } from "react-aria-components";
+import { CircleAlert, TriangleAlert } from "lucide-react";
 import { EXAMPLES } from "@/examples";
 import type { ParseResult } from "@/model/tokens";
 import { FORMAT_LABELS, countTokens } from "@/model/tokens";
 import { useAppStore } from "@/store/use-app-store";
 
-type DropEvent = Parameters<NonNullable<AriaDropZoneProps["onDrop"]>>[0];
-
-const ACCEPTED_TYPES = ["application/json", "text/plain", ".json"];
-
-async function readDrop(event: DropEvent): Promise<{ text: string; name: string } | null> {
-    for (const item of event.items) {
-        if (item.kind === "file") return { text: await item.getText(), name: item.name };
-        if (item.kind === "text" && item.types.has("text/plain")) return { text: await item.getText("text/plain"), name: "Dropped text" };
-    }
-    return null;
-}
+const ACCEPTED_TYPES = [".json", "application/json", "text/plain"];
 
 function statusMessage(result: ParseResult, hasSource: boolean): string {
     if (!hasSource) return "No tokens loaded yet.";
     if (result.errors.length) {
         const count = result.errors.length === 1 ? "1 error" : `${result.errors.length} errors`;
-        return `${count}. ${result.errors[0].message}`;
+        return `${count}. ${result.errors[0]?.message ?? ""}`;
     }
     const format = result.format ? FORMAT_LABELS[result.format] : "Unknown format";
     return `${format} detected, ${countTokens(result.tokens)} tokens parsed.`;
@@ -37,7 +25,10 @@ export function InputPanel({ result }: { result: ParseResult }) {
     const sourceName = useAppStore((s) => s.sourceName);
     const setSource = useAppStore((s) => s.setSource);
 
-    const loadFile = async (file: File) => setSource(await file.text(), file.name);
+    const loadFile = async (files: File[]) => {
+        const file = files[0];
+        if (file) setSource(await file.text(), file.name);
+    };
 
     return (
         <section aria-labelledby="input-heading" className="flex min-w-0 flex-col gap-5">
@@ -67,36 +58,7 @@ export function InputPanel({ result }: { result: ParseResult }) {
                 </div>
             </div>
 
-            <AriaDropZone
-                getDropOperation={(types) => (ACCEPTED_TYPES.some((t) => types.has(t)) || types.has("text/plain") ? "copy" : "cancel")}
-                onDrop={async (event) => {
-                    const dropped = await readDrop(event);
-                    if (dropped) setSource(dropped.text, dropped.name);
-                }}
-                className={({ isDropTarget, isFocusVisible }) =>
-                    cx(
-                        "flex flex-col items-center gap-3 rounded-xl border border-dashed border-control bg-primary px-4 py-5 text-center transition-colors",
-                        isDropTarget && "border-brand bg-brand-subtle",
-                        isFocusVisible && "outline-2 outline-offset-2 outline-focus",
-                    )
-                }
-            >
-                <Upload aria-hidden="true" className="size-6 text-fg-tertiary" />
-                <AriaText slot="label" className="text-sm text-tertiary">
-                    Drop a <span className="font-medium text-secondary">.json</span> tokens file here, or
-                </AriaText>
-                <AriaFileTrigger
-                    acceptedFileTypes={ACCEPTED_TYPES}
-                    onSelect={(files) => {
-                        const file = files?.[0];
-                        if (file) void loadFile(file);
-                    }}
-                >
-                    <Button size="sm" variant="secondary">
-                        Choose file
-                    </Button>
-                </AriaFileTrigger>
-            </AriaDropZone>
+            <FileDropZone label="Drop a .json tokens file here, or" acceptedFileTypes={ACCEPTED_TYPES} onSelect={loadFile} />
 
             <Textarea
                 label="Tokens JSON"
@@ -104,9 +66,12 @@ export function InputPanel({ result }: { result: ParseResult }) {
                 onChange={(value) => setSource(value, null)}
                 hint={`${sourceName ? `Loaded from ${sourceName}. ` : ""}W3C DTCG, Figma Variables and Tokens Studio JSON are detected automatically.`}
                 rows={16}
-                spellCheck="false"
+                spellCheck={false}
+                autoCapitalize="off"
+                autoCorrect="off"
+                font="data"
                 placeholder='{ "color": { "brand": { "$type": "color", "$value": "#444ce7" } } }'
-                textareaClassName="min-h-64 font-mono text-sm leading-5 whitespace-pre"
+                textareaClassName="min-h-64 whitespace-pre"
             />
 
             <div className="flex flex-wrap items-center gap-2">

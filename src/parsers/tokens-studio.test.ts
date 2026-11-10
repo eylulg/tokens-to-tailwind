@@ -53,6 +53,6 @@ describe("parseTokensStudio", () => {
     it("detects alias cycles across both alias syntaxes", () => {
         const cyclic = parseTokens(fixture("tokens-studio-cycle.json"));
         expect(cyclic.errors.map((e) => e.code)).toEqual(["ALIAS_CYCLE", "ALIAS_CYCLE"]);
-        expect(cyclic.errors[0].message).toContain("spacing.base -> spacing.double -> spacing.base");
+        expect(cyclic.errors[0]?.message).toContain("spacing.base -> spacing.double -> spacing.base");
     });
 });

@@ -89,8 +89,8 @@ describe("toTailwindTheme mapping", () => {
 
     it("writes aliases as var() references, or literal values when asked", () => {
         const tokens = [color("gray.900", "#101828"), color("text.primary", "#101828", { alias: "gray.900" })];
-        expect(planTheme(tokens).base[1].value).toBe("var(--color-gray-900)");
-        expect(planTheme(tokens, { preserveAliases: false, colorFormat: "hex" }).base[1].value).toBe("#101828");
+        expect(planTheme(tokens).base[1]?.value).toBe("var(--color-gray-900)");
+        expect(planTheme(tokens, { preserveAliases: false, colorFormat: "hex" }).base[1]?.value).toBe("#101828");
     });
 
     it("shortens to unique leaves but keeps the parent of numeric steps", () => {
@@ -142,6 +142,6 @@ describe("other exports", () => {
 
 describe("naming details", () => {
     it("drops a group that the next segment repeats", () => {
-        expect(planTheme([color("Text.text-primary", "#101828")]).base[0].name).toBe("--color-text-primary");
+        expect(planTheme([color("Text.text-primary", "#101828")]).base[0]?.name).toBe("--color-text-primary");
     });
 });

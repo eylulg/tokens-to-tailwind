@@ -76,7 +76,7 @@ describe("parseW3c", () => {
     it("detects alias cycles", () => {
         const cyclic = parseTokens(fixture("w3c-cycle.json"));
         expect(cyclic.errors.map((e) => e.code)).toEqual(["ALIAS_CYCLE", "ALIAS_CYCLE", "ALIAS_CYCLE"]);
-        expect(cyclic.errors[0].message).toBe("color.a: Alias cycle detected: color.a -> color.b -> color.c -> color.a");
+        expect(cyclic.errors[0]?.message).toBe("color.a: Alias cycle detected: color.a -> color.b -> color.c -> color.a");
         expect(cyclic.tokens.map((t) => t.name)).toEqual(["color.ok"]);
     });
 

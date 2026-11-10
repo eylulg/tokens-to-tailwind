@@ -82,12 +82,12 @@ describe("App", () => {
         await user.click(screen.getByRole("button", { name: "Load Figma Variables example" }));
         await user.click(screen.getByRole("tab", { name: "Export" }));
 
-        const code = await screen.findByRole("region", { name: "Generated theme.css" });
+        const code = await screen.findByRole("group", { name: "Generated theme.css" });
         expect(code).toHaveTextContent("@theme {");
         expect(code).toHaveTextContent("--color-brand-600: oklch(57.2% 0.2076 258.93);");
         expect(code).toHaveTextContent("@layer base { .dark-mode {");
 
-        await user.click(screen.getByRole("button", { name: "Copy" }));
+        await user.click(screen.getByRole("button", { name: "Copy theme.css" }));
         expect(await screen.findByText("theme.css copied to the clipboard")).toBeInTheDocument();
         expect(await navigator.clipboard.readText()).toBe(code.textContent);
 
@@ -101,15 +101,15 @@ describe("App", () => {
 
         await user.click(screen.getByRole("radio", { name: /Shorten to leaf/ }));
         await user.click(screen.getByRole("radio", { name: "Hex" }));
-        const theme = screen.getByRole("region", { name: "Generated theme.css" });
+        const theme = screen.getByRole("group", { name: "Generated theme.css" });
         expect(theme).toHaveTextContent("--color-bg-primary: var(--color-white);");
         expect(theme).toHaveTextContent("--color-brand-600: #444ce7;");
 
         await user.click(screen.getByRole("radio", { name: "CSS custom properties" }));
-        expect(screen.getByRole("region", { name: "Generated tokens.css" })).toHaveTextContent(":root {");
+        expect(screen.getByRole("group", { name: "Generated tokens.css" })).toHaveTextContent(":root {");
 
         await user.click(screen.getByRole("radio", { name: "Normalised JSON" }));
-        const json = screen.getByRole("region", { name: "Generated tokens.json" });
+        const json = screen.getByRole("group", { name: "Generated tokens.json" });
         expect(JSON.parse(json.textContent ?? "")[0]).toMatchObject({ name: "color.base.white", type: "color" });
     });
 

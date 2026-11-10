@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { Button } from "@eylulg/ui/button";
 import { Checkbox } from "@eylulg/ui/checkbox";
+import { CodeBlock } from "@eylulg/ui/code-block";
 import { Radio, RadioGroup } from "@eylulg/ui/radio-group";
-import { Copy, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import type { ColorFormat, Naming } from "@/generator";
 import type { ParseResult } from "@/model/tokens";
 import type { ExportFormat } from "@/store/use-app-store";
@@ -22,32 +23,12 @@ function download(text: string, fileName: string, mime: string) {
 export function ExportTab({ result }: { result: ParseResult }) {
     const { naming, colorFormat, preserveAliases, exportFormat } = useAppStore();
     const { setNaming, setColorFormat, setPreserveAliases, setExportFormat } = useAppStore();
-    const [announcement, setAnnouncement] = useState("");
-    const timer = useRef<number | undefined>(undefined);
-
-    useEffect(() => () => window.clearTimeout(timer.current), []);
-
     const output = useMemo(
         () => renderExport(exportFormat, result.tokens, { naming, colorFormat, preserveAliases, source: result.format }),
         [exportFormat, result, naming, colorFormat, preserveAliases],
     );
     const file = EXPORT_FILES[exportFormat];
     const isEmpty = result.tokens.length === 0;
-
-    const announce = (message: string) => {
-        setAnnouncement(message);
-        window.clearTimeout(timer.current);
-        timer.current = window.setTimeout(() => setAnnouncement(""), 4000);
-    };
-
-    const copy = async () => {
-        try {
-            await navigator.clipboard.writeText(output);
-            announce(`${file.fileName} copied to the clipboard`);
-        } catch {
-            announce("Copy failed. Select the code and copy it manually.");
-        }
-    };
 
     return (
         <div className="flex flex-col gap-6">
@@ -91,9 +72,6 @@ export function ExportTab({ result }: { result: ParseResult }) {
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <h3 className="font-mono text-sm font-semibold text-primary">{file.fileName}</h3>
                 <div className="flex flex-wrap gap-2">
-                    <Button size="sm" variant="secondary" iconLeading={Copy} onPress={copy} isDisabled={isEmpty}>
-                        Copy
-                    </Button>
                     <Button
                         size="sm"
                         iconLeading={Download}
@@ -104,23 +82,19 @@ export function ExportTab({ result }: { result: ParseResult }) {
                     </Button>
                 </div>
             </div>
-            <p role="status" className="min-h-5 text-sm text-success">
-                {announcement}
-            </p>
 
             {isEmpty ? (
                 <p className="rounded-xl bg-secondary p-6 text-sm text-tertiary">Load tokens to generate {file.fileName}.</p>
             ) : (
-                <pre
-                    // Scrollable code must be reachable by keyboard (axe: scrollable-region-focusable).
-                    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                    tabIndex={0}
-                    role="region"
-                    aria-label={`Generated ${file.fileName}`}
-                    className="max-h-[36rem] overflow-auto rounded-xl bg-secondary p-4 font-mono text-xs leading-5 text-secondary ring-1 ring-default outline-focus ring-inset focus-visible:outline-2"
+                <CodeBlock
+                    label={`Generated ${file.fileName}`}
+                    copyable
+                    copyLabel={`Copy ${file.fileName}`}
+                    copiedLabel={`${file.fileName} copied to the clipboard`}
+                    className="max-h-[36rem] overflow-auto"
                 >
-                    <code>{output}</code>
-                </pre>
+                    {output}
+                </CodeBlock>
             )}
         </div>
     );

@@ -65,7 +65,7 @@ export function buildTokens(entries: RawEntry[], issues: Issues): Token[] {
         if (typeof value === "string") {
             const full = FULL_REF.exec(value.trim());
             if (full) {
-                const name = full[1].trim();
+                const name = (full[1] ?? "").trim();
                 if (stack.includes(name)) {
                     const cycle = [...stack.slice(stack.indexOf(name)), name].join(" -> ");
                     throw new AliasError("ALIAS_CYCLE", `Alias cycle detected: ${cycle}`);
