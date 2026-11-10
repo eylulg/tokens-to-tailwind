@@ -17,8 +17,7 @@ beforeEach(() => {
     useAppStore.setState(useAppStore.getInitialState(), true);
 });
 
-// Untitled UI labels contain a "*" that CSS hides; jsdom has no CSS, so match the start.
-const tokensField = () => screen.getByRole("textbox", { name: /^Tokens JSON/ });
+const tokensField = () => screen.getByRole("textbox", { name: "Tokens JSON" });
 const status = () => screen.getAllByRole("status").find((el) => el.textContent?.match(/detected|error|No tokens/)) as HTMLElement;
 
 describe("App", () => {
@@ -44,7 +43,7 @@ describe("App", () => {
     it("filters swatches with the search field", async () => {
         const { user } = setup();
         await user.click(screen.getByRole("button", { name: "Load W3C DTCG example" }));
-        await user.type(await screen.findByRole("textbox", { name: /^Search tokens/ }), "success");
+        await user.type(await screen.findByRole("textbox", { name: "Search tokens" }), "success");
         expect(await screen.findByText(/1 of \d+ tokens match/)).toBeInTheDocument();
         expect(screen.getByText("color.success.500")).toBeInTheDocument();
         expect(screen.queryByText("color.gray.50")).not.toBeInTheDocument();
@@ -128,13 +127,5 @@ describe("App", () => {
         await user.click(screen.getByRole("switch", { name: "Dark preview" }));
         expect(scope).toHaveClass("dark-mode");
         expect(await axe(container)).toHaveNoViolations();
-    });
-
-    it("toggles the page theme with the dark-mode class", async () => {
-        const { user } = setup();
-        await user.click(screen.getByRole("button", { name: "Switch to dark mode" }));
-        expect(document.documentElement).toHaveClass("dark-mode");
-        await user.click(screen.getByRole("button", { name: "Switch to light mode" }));
-        expect(document.documentElement).not.toHaveClass("dark-mode");
     });
 });

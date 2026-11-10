@@ -1,21 +1,14 @@
-import { useId } from "react";
-import { AlertCircle, AlertTriangle, UploadCloud02 } from "@untitledui/icons";
+import { Badge } from "@eylulg/ui/badge";
+import { Button } from "@eylulg/ui/button";
+import { cx } from "@eylulg/ui/cx";
+import { Textarea } from "@eylulg/ui/textarea";
+import { CircleAlert, TriangleAlert, Upload } from "lucide-react";
 import type { DropZoneProps as AriaDropZoneProps } from "react-aria-components";
-import {
-    DropZone as AriaDropZone,
-    FileTrigger as AriaFileTrigger,
-    Text as AriaText,
-    TextField as AriaTextField,
-} from "react-aria-components";
-import { Badge } from "@/components/base/badges/badges";
-import { Button } from "@/components/base/buttons/button";
-import { Label } from "@/components/base/input/label";
-import { TextAreaBase } from "@/components/base/textarea/textarea";
+import { DropZone as AriaDropZone, FileTrigger as AriaFileTrigger, Text as AriaText } from "react-aria-components";
 import { EXAMPLES } from "@/examples";
 import type { ParseResult } from "@/model/tokens";
 import { FORMAT_LABELS, countTokens } from "@/model/tokens";
 import { useAppStore } from "@/store/use-app-store";
-import { cx } from "@/utils/cx";
 
 type DropEvent = Parameters<NonNullable<AriaDropZoneProps["onDrop"]>>[0];
 
@@ -43,7 +36,6 @@ export function InputPanel({ result }: { result: ParseResult }) {
     const source = useAppStore((s) => s.source);
     const sourceName = useAppStore((s) => s.sourceName);
     const setSource = useAppStore((s) => s.setSource);
-    const hintId = useId();
 
     const loadFile = async (file: File) => setSource(await file.text(), file.name);
 
@@ -65,9 +57,9 @@ export function InputPanel({ result }: { result: ParseResult }) {
                         <Button
                             key={example.format}
                             size="sm"
-                            color="secondary"
+                            variant="secondary"
                             aria-label={`Load ${example.label} example`}
-                            onClick={() => setSource(example.text, `${example.label} example`)}
+                            onPress={() => setSource(example.text, `${example.label} example`)}
                         >
                             {example.label}
                         </Button>
@@ -83,13 +75,13 @@ export function InputPanel({ result }: { result: ParseResult }) {
                 }}
                 className={({ isDropTarget, isFocusVisible }) =>
                     cx(
-                        "flex flex-col items-center gap-3 rounded-xl border border-dashed border-primary bg-primary px-4 py-5 text-center transition duration-100 ease-linear",
-                        isDropTarget && "border-brand bg-brand-primary",
-                        isFocusVisible && "outline-2 outline-offset-2 outline-focus-ring",
+                        "flex flex-col items-center gap-3 rounded-xl border border-dashed border-control bg-primary px-4 py-5 text-center transition-colors",
+                        isDropTarget && "border-brand bg-brand-subtle",
+                        isFocusVisible && "outline-2 outline-offset-2 outline-focus",
                     )
                 }
             >
-                <UploadCloud02 aria-hidden="true" className="size-6 text-fg-quaternary" />
+                <Upload aria-hidden="true" className="size-6 text-fg-tertiary" />
                 <AriaText slot="label" className="text-sm text-tertiary">
                     Drop a <span className="font-medium text-secondary">.json</span> tokens file here, or
                 </AriaText>
@@ -100,49 +92,31 @@ export function InputPanel({ result }: { result: ParseResult }) {
                         if (file) void loadFile(file);
                     }}
                 >
-                    <Button size="sm" color="secondary">
+                    <Button size="sm" variant="secondary">
                         Choose file
                     </Button>
                 </AriaFileTrigger>
             </AriaDropZone>
 
-            <AriaTextField
+            <Textarea
+                label="Tokens JSON"
                 value={source}
                 onChange={(value) => setSource(value, null)}
-                className="flex flex-col gap-1.5"
-                aria-describedby={hintId}
-            >
-                <Label>Tokens JSON</Label>
-                <TextAreaBase
-                    rows={16}
-                    spellCheck={false}
-                    autoCapitalize="off"
-                    autoCorrect="off"
-                    placeholder='{ "color": { "brand": { "$type": "color", "$value": "#444ce7" } } }'
-                    className="min-h-64 resize-y font-mono text-sm leading-5 whitespace-pre"
-                />
-                <p id={hintId} className="text-sm text-tertiary">
-                    {sourceName ? `Loaded from ${sourceName}. ` : ""}W3C DTCG, Figma Variables and Tokens Studio JSON are detected
-                    automatically.
-                </p>
-            </AriaTextField>
+                hint={`${sourceName ? `Loaded from ${sourceName}. ` : ""}W3C DTCG, Figma Variables and Tokens Studio JSON are detected automatically.`}
+                rows={16}
+                spellCheck="false"
+                placeholder='{ "color": { "brand": { "$type": "color", "$value": "#444ce7" } } }'
+                textareaClassName="min-h-64 font-mono text-sm leading-5 whitespace-pre"
+            />
 
             <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-secondary">Format</span>
                 {result.format ? (
-                    <Badge type="pill-color" color="brand" size="md">
-                        {FORMAT_LABELS[result.format]}
-                    </Badge>
+                    <Badge color="brand">{FORMAT_LABELS[result.format]}</Badge>
                 ) : (
-                    <Badge type="pill-color" color="gray" size="md">
-                        {source.trim() ? "Not recognised" : "Waiting for input"}
-                    </Badge>
+                    <Badge>{source.trim() ? "Not recognised" : "Waiting for input"}</Badge>
                 )}
-                {result.format && (
-                    <Badge type="pill-color" color="gray" size="md">
-                        {countTokens(result.tokens)} tokens
-                    </Badge>
-                )}
+                {result.format && <Badge>{countTokens(result.tokens)} tokens</Badge>}
             </div>
 
             <p role="status" className="sr-only">
@@ -150,12 +124,12 @@ export function InputPanel({ result }: { result: ParseResult }) {
             </p>
 
             {result.errors.length > 0 && (
-                <div className="rounded-xl bg-error-primary p-4 ring-1 ring-error_subtle ring-inset">
-                    <h3 className="flex items-center gap-2 text-sm font-semibold text-error-primary">
-                        <AlertCircle aria-hidden="true" className="size-5" />
+                <div className="rounded-xl border border-error bg-error-subtle p-4">
+                    <h3 className="flex items-center gap-2 text-sm font-semibold text-error">
+                        <CircleAlert aria-hidden="true" className="size-5" />
                         {result.errors.length === 1 ? "1 error" : `${result.errors.length} errors`}
                     </h3>
-                    <ul aria-label="Errors" className="mt-2 flex list-disc flex-col gap-1 pl-7 text-sm break-words text-error-primary">
+                    <ul aria-label="Errors" className="mt-2 flex list-disc flex-col gap-1 pl-7 text-sm break-words text-error">
                         {result.errors.map((error, index) => (
                             <li key={`${error.code}-${index}`}>{error.message}</li>
                         ))}
@@ -164,9 +138,9 @@ export function InputPanel({ result }: { result: ParseResult }) {
             )}
 
             {result.warnings.length > 0 && (
-                <div className="ring-warning_subtle rounded-xl bg-warning-primary p-4 ring-1 ring-inset">
+                <div className="rounded-xl border border-default bg-warning-subtle p-4">
                     <h3 className="flex items-center gap-2 text-sm font-semibold text-primary">
-                        <AlertTriangle aria-hidden="true" className="size-5 text-fg-warning-primary" />
+                        <TriangleAlert aria-hidden="true" className="size-5 text-fg-warning" />
                         {result.warnings.length === 1 ? "1 warning" : `${result.warnings.length} warnings`}
                     </h3>
                     <ul aria-label="Warnings" className="mt-2 flex list-disc flex-col gap-1 pl-7 text-sm break-words text-secondary">

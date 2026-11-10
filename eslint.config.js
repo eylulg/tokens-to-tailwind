@@ -7,7 +7,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-    { ignores: ["dist", "coverage", "node_modules"] },
+    { ignores: ["dist", "coverage", "node_modules", "ui-src"] },
     {
         extends: [js.configs.recommended, ...tseslint.configs.recommended],
         files: ["**/*.{ts,tsx}"],
@@ -25,18 +25,6 @@ export default tseslint.config(
             ...jsxA11y.flatConfigs.recommended.rules,
             "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
             "@typescript-eslint/consistent-type-imports": "error",
-        },
-    },
-    {
-        // Vendored Untitled UI components keep their upstream shape.
-        files: ["src/components/base/**", "src/components/application/**", "src/components/foundations/**"],
-        rules: {
-            "react-refresh/only-export-components": "off",
-            // Label wrappers forward clicks to React Aria inputs, which own keyboard handling.
-            "jsx-a11y/click-events-have-key-events": "off",
-            "jsx-a11y/no-static-element-interactions": "off",
-            "jsx-a11y/img-redundant-alt": "off",
-            "@typescript-eslint/no-empty-object-type": "off",
         },
     },
     prettier,

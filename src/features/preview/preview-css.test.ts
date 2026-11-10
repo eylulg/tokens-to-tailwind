@@ -11,20 +11,20 @@ const color = (name: string, value: string, mode?: "light" | "dark"): Token => (
 });
 
 describe("buildPreviewCss", () => {
-    it("re-declares Untitled UI semantic variables inside the scope", () => {
+    it("re-declares the library semantic variables inside the scope", () => {
         const css = buildPreviewCss([], "#p", {});
-        expect(css).toContain("--color-bg-brand-solid: var(--color-brand-600);");
+        expect(css).toContain("--ui-bg-brand-solid: var(--color-brand-600);");
         expect(css).toMatch(/\n#p\.dark-mode \{/);
         expect(css).not.toContain(".dark-mode #p");
     });
 
-    it("maps a primary scale and single semantic colors to Untitled roles", () => {
+    it("maps a primary scale and single semantic colors to library roles", () => {
         const css = buildPreviewCss([color("primary.600", "#7c3aed"), color("surface", "#ffffff"), color("fg", "#0f172a")], "#p", {
             colorFormat: "hex",
         });
         expect(css).toContain("--color-brand-600: var(--color-primary-600);");
-        expect(css).toContain("--color-bg-primary: var(--color-surface);");
-        expect(css).toContain("--color-text-primary: var(--color-fg);");
+        expect(css).toContain("--ui-bg-primary: var(--color-surface);");
+        expect(css).toContain("--ui-text-primary: var(--color-fg);");
         expect(css).toContain("--color-primary-600: #7c3aed;");
     });
 
@@ -33,6 +33,10 @@ describe("buildPreviewCss", () => {
             colorFormat: "hex",
         });
         const darkRule = css.slice(css.indexOf("#p.dark-mode"));
+        expect(darkRule).toContain("--ui-bg-primary: var(--color-bg-primary);");
+        expect(darkRule.indexOf("--ui-bg-primary: var(--color-bg-primary);")).toBeGreaterThan(
+            darkRule.indexOf("--ui-bg-primary: var(--color-gray-950);"),
+        );
         expect(darkRule).toContain("--color-bg-primary: #000;");
     });
 });

@@ -1,12 +1,20 @@
 /// <reference types="vitest/config" />
 import { fileURLToPath, URL } from "node:url";
+import { themeInitScript } from "@eylulg/ui/theme-script";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 export default defineConfig({
     base: "/tokens-to-tailwind/",
-    plugins: [react(), tailwindcss()],
+    plugins: [
+        react(),
+        tailwindcss(),
+        {
+            name: "theme-init",
+            transformIndexHtml: () => [{ tag: "script", children: themeInitScript, injectTo: "head-prepend" }],
+        },
+    ],
     build: {
         rollupOptions: {
             output: {
@@ -19,7 +27,13 @@ export default defineConfig({
             },
         },
     },
+    server: {
+        // The file: dependency is a symlink to ../ui, outside the project root.
+        fs: { allow: [".", fileURLToPath(new URL("../ui", import.meta.url))] },
+    },
     resolve: {
+        // The linked library has its own node_modules; one copy of React, React Aria and lucide must run.
+        dedupe: ["react", "react-dom", "react-aria-components", "lucide-react"],
         alias: {
             "@": fileURLToPath(new URL("./src", import.meta.url)),
         },

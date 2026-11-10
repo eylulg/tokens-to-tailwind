@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
-import { SearchLg } from "@untitledui/icons";
-import { Input } from "@/components/base/input/input";
+import { Input } from "@eylulg/ui/input";
+import { Search } from "lucide-react";
 import type { Token, TokenType } from "@/model/tokens";
 import { TOKEN_TYPES, countTokens } from "@/model/tokens";
 
@@ -62,11 +62,7 @@ function matches(row: Row, query: string): boolean {
 function ColorChip({ token, label }: { token: Token; label: string }) {
     return (
         <div className="flex min-w-0 flex-col gap-1">
-            <div
-                aria-hidden="true"
-                className="h-14 w-full rounded-lg ring-1 ring-secondary_alt ring-inset"
-                style={{ background: token.value }}
-            />
+            <div aria-hidden="true" className="h-14 w-full rounded-lg ring-1 ring-default ring-inset" style={{ background: token.value }} />
             <dl className="min-w-0 text-xs text-tertiary">
                 <dt className="sr-only">{label} hex</dt>
                 <dd className="font-mono text-secondary">{token.value}</dd>
@@ -104,15 +100,11 @@ function Specimen({ token }: { token: Token }) {
             return <div aria-hidden="true" className="h-3 max-w-full rounded-sm bg-brand-solid" style={{ width: token.value }} />;
         case "radius":
             return (
-                <div aria-hidden="true" className="size-14 border-2 border-brand bg-brand-primary" style={{ borderRadius: token.value }} />
+                <div aria-hidden="true" className="size-14 border-2 border-brand bg-brand-subtle" style={{ borderRadius: token.value }} />
             );
         case "shadow":
             return (
-                <div
-                    aria-hidden="true"
-                    className="size-14 rounded-lg bg-primary ring-1 ring-secondary_alt"
-                    style={{ boxShadow: token.value }}
-                />
+                <div aria-hidden="true" className="size-14 rounded-lg bg-primary ring-1 ring-default" style={{ boxShadow: token.value }} />
             );
         case "lineHeight":
             return (
@@ -132,7 +124,7 @@ function Specimen({ token }: { token: Token }) {
 function TokenCard({ row }: { row: Row }) {
     const isColor = row.type === "color";
     return (
-        <li className="flex min-w-0 flex-col gap-3 rounded-xl bg-primary p-3 ring-1 ring-secondary ring-inset">
+        <li className="flex min-w-0 flex-col gap-3 rounded-xl bg-primary p-3 ring-1 ring-default ring-inset">
             <p className="truncate font-mono text-xs font-medium text-primary" title={row.name}>
                 {row.name}
             </p>
@@ -151,7 +143,7 @@ function TokenCard({ row }: { row: Row }) {
                 </>
             )}
             {(row.base?.mode || row.dark) && (
-                <p className="text-xs text-quaternary">{row.dark && row.base ? "Light and dark" : row.dark ? "Dark only" : "Light"}</p>
+                <p className="text-xs text-tertiary">{row.dark && row.base ? "Light and dark" : row.dark ? "Dark only" : "Light"}</p>
             )}
         </li>
     );
@@ -177,7 +169,14 @@ export function TokensTab({ tokens }: { tokens: Token[] }) {
 
     return (
         <div className="flex flex-col gap-6">
-            <Input label="Search tokens" placeholder="Name, value or alias" icon={SearchLg} value={query} onChange={setQuery} size="sm" />
+            <Input
+                label="Search tokens"
+                placeholder="Name, value or alias"
+                iconLeading={Search}
+                value={query}
+                onChange={setQuery}
+                size="sm"
+            />
             <p role="status" className="text-sm text-tertiary">
                 {normalised ? `${total} of ${countTokens(tokens)} tokens match` : `${total} tokens`}
             </p>

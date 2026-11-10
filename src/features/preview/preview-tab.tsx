@@ -1,13 +1,14 @@
 import { useId, useMemo } from "react";
-import { Mail01 } from "@untitledui/icons";
-import { Badge, BadgeWithDot } from "@/components/base/badges/badges";
-import { Button } from "@/components/base/buttons/button";
-import { Checkbox } from "@/components/base/checkbox/checkbox";
-import { Input } from "@/components/base/input/input";
-import { Toggle } from "@/components/base/toggle/toggle";
+import { Badge } from "@eylulg/ui/badge";
+import { Button } from "@eylulg/ui/button";
+import { Card, CardBody, CardFooter, CardHeader } from "@eylulg/ui/card";
+import { cx } from "@eylulg/ui/cx";
+import { Input } from "@eylulg/ui/input";
+import { Switch } from "@eylulg/ui/switch";
+import { Tab, TabList, TabPanel, Tabs } from "@eylulg/ui/tabs";
+import { Mail } from "lucide-react";
 import type { Token } from "@/model/tokens";
 import { useAppStore } from "@/store/use-app-store";
-import { cx } from "@/utils/cx";
 import { buildPreviewCss } from "./preview-css";
 
 export function PreviewTab({ tokens }: { tokens: Token[] }) {
@@ -21,13 +22,15 @@ export function PreviewTab({ tokens }: { tokens: Token[] }) {
     const css = useMemo(() => buildPreviewCss(tokens, `#${scopeId}`, { naming, colorFormat }), [tokens, scopeId, naming, colorFormat]);
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 pt-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="max-w-prose text-sm text-tertiary">
-                    Untitled UI components rendered with the generated variables, scoped to this panel only.
-                    {!hasDark && " These tokens have no dark set, so dark mode falls back to the Untitled UI defaults."}
+                    Library components rendered with the generated variables, scoped to this panel only.
+                    {!hasDark && " These tokens have no dark set, so dark mode falls back to the library defaults."}
                 </p>
-                <Toggle label="Dark preview" isSelected={previewDark} onChange={setPreviewDark} />
+                <Switch isSelected={previewDark} onChange={setPreviewDark}>
+                    Dark preview
+                </Switch>
             </div>
 
             <style>{css}</style>
@@ -35,72 +38,68 @@ export function PreviewTab({ tokens }: { tokens: Token[] }) {
                 id={scopeId}
                 data-testid="preview-scope"
                 className={cx(
-                    "rounded-2xl bg-secondary p-4 font-body text-primary ring-1 ring-secondary ring-inset sm:p-6",
+                    "rounded-2xl bg-secondary p-4 font-sans text-primary ring-1 ring-default ring-inset sm:p-6",
                     previewDark && "dark-mode",
                 )}
             >
                 <div className="grid gap-4 lg:grid-cols-2">
-                    <article
-                        aria-labelledby={`${scopeId}-card`}
-                        className="flex flex-col gap-4 rounded-xl bg-primary p-5 shadow-lg ring-1 ring-secondary ring-inset"
-                    >
+                    <Card>
                         <div className="flex flex-wrap items-center gap-2">
-                            <BadgeWithDot type="pill-color" color="brand" size="sm">
+                            <Badge color="brand" size="sm" dot>
                                 New release
-                            </BadgeWithDot>
-                            <Badge type="pill-color" color="success" size="sm">
+                            </Badge>
+                            <Badge color="success" size="sm">
                                 Stable
                             </Badge>
                         </div>
-                        <h3 id={`${scopeId}-card`} className="font-display text-display-xs font-semibold text-primary">
-                            Ship your design system
-                        </h3>
-                        <p className="text-md text-tertiary">
+                        <CardHeader title="Ship your design system" />
+                        <CardBody>
                             Tokens flow from Figma into code. Colors, type, radius and shadows on this card all come from the file you
                             loaded.
-                        </p>
-                        <div className="flex flex-wrap gap-3">
-                            <Button color="primary">Get started</Button>
-                            <Button color="secondary">Learn more</Button>
-                            <Button color="link-color">Changelog</Button>
-                        </div>
-                    </article>
+                        </CardBody>
+                        <CardFooter className="justify-start">
+                            <Button>Get started</Button>
+                            <Button variant="secondary">Learn more</Button>
+                            <Button variant="tertiary">Changelog</Button>
+                        </CardFooter>
+                    </Card>
 
-                    <form
-                        aria-labelledby={`${scopeId}-form`}
-                        className="flex flex-col gap-4 rounded-xl bg-primary p-5 shadow-xs ring-1 ring-secondary ring-inset"
-                        onSubmit={(event) => event.preventDefault()}
-                    >
-                        <h3 id={`${scopeId}-form`} className="text-lg font-semibold text-primary">
-                            Join the newsletter
-                        </h3>
-                        <Input label="Email" type="email" placeholder="you@example.com" icon={Mail01} hint="One email a month. No spam." />
-                        <Checkbox label="I agree to the privacy policy" />
-                        <div className="flex flex-wrap gap-3">
-                            <Button type="submit" color="primary">
-                                Subscribe
-                            </Button>
-                            <Button color="tertiary">Cancel</Button>
-                        </div>
-                    </form>
+                    <Card>
+                        <form aria-labelledby={`${scopeId}-form`} className="contents" onSubmit={(event) => event.preventDefault()}>
+                            <CardHeader title={<span id={`${scopeId}-form`}>Join the newsletter</span>} />
+                            <Input
+                                label="Email"
+                                type="email"
+                                placeholder="you@example.com"
+                                iconLeading={Mail}
+                                hint="One email a month. No spam."
+                            />
+                            <Switch>Send me product news</Switch>
+                            <CardFooter className="justify-start">
+                                <Button type="submit">Subscribe</Button>
+                                <Button variant="tertiary">Cancel</Button>
+                            </CardFooter>
+                        </form>
+                    </Card>
                 </div>
 
+                <Tabs className="mt-4">
+                    <TabList aria-label="Sample sections">
+                        <Tab id="overview">Overview</Tab>
+                        <Tab id="activity">Activity</Tab>
+                        <Tab id="billing">Billing</Tab>
+                    </TabList>
+                    <TabPanel id="overview">A summary of the project, using the body text color.</TabPanel>
+                    <TabPanel id="activity">Recent changes appear here.</TabPanel>
+                    <TabPanel id="billing">Invoices and payment methods.</TabPanel>
+                </Tabs>
+
                 <div className="mt-4 flex flex-wrap gap-2">
-                    <Badge type="color" color="brand">
-                        Brand
-                    </Badge>
-                    <Badge type="color" color="gray">
-                        Neutral
-                    </Badge>
-                    <Badge type="color" color="error">
-                        Error
-                    </Badge>
-                    <Badge type="color" color="warning">
-                        Warning
-                    </Badge>
-                    <Badge type="modern" color="gray">
-                        Modern
-                    </Badge>
+                    <Badge color="brand">Brand</Badge>
+                    <Badge>Neutral</Badge>
+                    <Badge color="success">Success</Badge>
+                    <Badge color="error">Error</Badge>
+                    <Badge color="warning">Warning</Badge>
                 </div>
             </div>
         </div>

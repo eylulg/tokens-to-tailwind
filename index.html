@@ -9,14 +9,6 @@
             content="Paste design tokens (W3C DTCG, Figma Variables, Tokens Studio) and export a Tailwind CSS 4 theme.css."
         />
         <title>Tokens to Tailwind</title>
-        <script>
-            // Apply the saved or system theme before first paint to avoid a flash.
-            try {
-                var saved = localStorage.getItem("tokens-to-tailwind:theme");
-                var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-                if (dark) document.documentElement.classList.add("dark-mode");
-            } catch (e) {}
-        </script>
     </head>
     <body>
         <div id="root"></div>

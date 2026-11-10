@@ -2,8 +2,8 @@
 
 [![CI](https://github.com/eylulg/tokens-to-tailwind/actions/workflows/ci.yml/badge.svg)](https://github.com/eylulg/tokens-to-tailwind/actions/workflows/ci.yml)
 
-Paste or drop a design tokens file, see every token as a swatch or type specimen, preview Untitled UI components themed with
-those tokens, and export a Tailwind CSS 4 `theme.css` you can drop into an Untitled UI or plain Tailwind 4 project.
+Paste or drop a design tokens file, see every token as a swatch or type specimen, preview `@eylulg/ui` components themed with
+those tokens, and export a Tailwind CSS 4 `theme.css` you can drop into an `@eylulg/ui` or plain Tailwind 4 project.
 
 Everything runs in the browser. Nothing is uploaded.
 
@@ -127,8 +127,8 @@ Naming rules:
 - **Keep full path** keeps every other segment. **Shorten to leaf** keeps the shortest trailing part that is still unique, and never
   a bare scale step: `semantic.bg.primary` becomes `--color-bg-primary`, `color.gray.500` stays `--color-gray-500`.
 - Aliases become `var(--target)` when the target is exported too (switch off "Keep aliases as var()" for literal values).
-- Light and mode independent values go into `@theme`. Dark values go into `@layer base { .dark-mode { ... } }`, the same convention
-  Untitled UI uses. Dark only tokens are also written to `@theme` so Tailwind creates their utilities.
+- Light and mode independent values go into `@theme`. Dark values go into `@layer base { .dark-mode { ... } }`, the `.dark-mode` class
+  that `@eylulg/ui` uses. Dark only tokens are also written to `@theme` so Tailwind creates their utilities.
 
 Example output for the W3C fixture: [`src/generator/__snapshots__/w3c.theme.css`](src/generator/__snapshots__/w3c.theme.css).
 
@@ -138,7 +138,7 @@ Example output for the W3C fixture: [`src/generator/__snapshots__/w3c.theme.css`
 @import "tailwindcss";
 @import "./theme.css";
 
-/* Only needed outside Untitled UI, which already defines it. */
+/* Only needed without @eylulg/ui, which already defines it. */
 @custom-variant dark (&:where(.dark-mode, .dark-mode *));
 ```
 
@@ -152,12 +152,17 @@ Example output for the W3C fixture: [`src/generator/__snapshots__/w3c.theme.css`
 - The font family of a typography composite is not exported, since `--text-*` has no font family sub-property. Reference a
   `--font-*` token instead.
 - Letter spacing, text decoration and text case are not mapped.
-- The preview maps common scale names (`primary`, `accent`, `slate`, `neutral` and similar) onto the Untitled UI roles. Unusual names
+- The preview maps common scale names (`primary`, `accent`, `slate`, `neutral` and similar) onto the `@eylulg/ui` roles (`brand`, `gray`, `success`, `warning`, `error`, and semantic names such as `bg-primary`). Unusual names
   still export correctly but may not change the preview.
 
 ## Run it
 
 Needs Node 20.19 or newer (CI uses Node 24).
+
+`@eylulg/ui` is a `file:../ui` dependency until it is published: clone [eylulg/ui](https://github.com/eylulg/ui) next to this
+folder and run `npm install && npm run build` in it before `npm install` here. CI checks the library out into `ui-src`, builds it and
+installs it from there. Once the package is on npm the dependency becomes `^1.0.0`; the GitHub Pages and Vercel deploys need that
+publish to build without the checkout.
 
 ```sh
 npm install
@@ -173,6 +178,7 @@ npm test           # Vitest: parsers, generator snapshots, preview CSS, app (Tes
 npm run typecheck
 npm run lint       # ESLint 9 flat config with typescript-eslint, react-hooks and jsx-a11y
 npm run format:check
+npm run knip        # unused files, exports and dependencies
 ```
 
 - Every parser has fixture based tests, including invalid JSON, unknown format, unresolved alias and alias cycles.
@@ -181,8 +187,7 @@ npm run format:check
 
 ## Stack
 
-Vite 7, React 19, TypeScript (strict), Tailwind CSS 4, [Untitled UI React](https://www.untitledui.com/react) free components on
-React Aria, Zustand, culori for color conversion. Deployed to GitHub Pages by `.github/workflows/deploy.yml`.
+Vite 7, React 19, TypeScript (strict), Tailwind CSS 4, the shared `@eylulg/ui` design system (React Aria Components, `tokens` theme variant), Zustand, culori for color conversion. Deployed to GitHub Pages by `.github/workflows/deploy.yml`.
 
 ## License
 
