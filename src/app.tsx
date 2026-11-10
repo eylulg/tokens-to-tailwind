@@ -37,7 +37,10 @@ export function App() {
                 <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
                     <InputPanel result={result} />
 
-                    <section aria-label="Results" className="min-w-0">
+                    <section aria-labelledby="results-heading" className="min-w-0">
+                        <h2 id="results-heading" className="sr-only">
+                            Results
+                        </h2>
                         <Tabs>
                             <TabList aria-label="Result views" className="overflow-x-auto">
                                 <Tab id="tokens">Tokens</Tab>
