@@ -5,3 +5,4 @@ package-lock.json
 src/**/__snapshots__
 src/parsers/__fixtures__
 ui-src
+results.sarif
