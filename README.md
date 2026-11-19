@@ -16,17 +16,17 @@ Everything runs in the browser. Nothing is uploaded.
    (`color.a -> color.b -> color.a`) as errors without dropping the valid tokens.
 3. **Normalises** everything into one model:
 
-    ```ts
-    {
-      name: "semantic.bg.primary",
-      path: ["semantic", "bg", "primary"],
-      type: "color", // color | dimension | fontFamily | fontSize | lineHeight | fontWeight | shadow | radius | spacing
-      value: "#0c111d", // colors are lowercase hex, plus an oklch() string
-      oklch: "oklch(17.9% 0.0261 266.47)",
-      mode: "dark", // light | dark, absent for mode independent tokens
-      alias: "color.gray.950",
-    }
-    ```
+   ```ts
+   {
+     name: "semantic.bg.primary",
+     path: ["semantic", "bg", "primary"],
+     type: "color", // color | dimension | fontFamily | fontSize | lineHeight | fontWeight | shadow | radius | spacing
+     value: "#0c111d", // colors are lowercase hex, plus an oklch() string
+     oklch: "oklch(17.9% 0.0261 266.47)",
+     mode: "dark", // light | dark, absent for mode independent tokens
+     alias: "color.gray.950",
+   }
+   ```
 
 4. **Shows** the tokens grouped by type with search, a live preview of a card, a form, buttons and badges, and the export.
 5. **Exports** a Tailwind 4 `theme.css` (an `@theme` block, plus a `.dark-mode` override in `@layer base` when the file has dark
@@ -42,16 +42,16 @@ Everything runs in the browser. Nothing is uploaded.
 
 ```json
 {
-    "color": {
-        "$type": "color",
-        "brand": { "600": { "$value": "#444ce7" } },
-        "bg": {
-            "primary": {
-                "$value": "{color.base.white}",
-                "$extensions": { "mode": { "light": "{color.base.white}", "dark": "{color.gray.950}" } }
-            }
-        }
+  "color": {
+    "$type": "color",
+    "brand": { "600": { "$value": "#444ce7" } },
+    "bg": {
+      "primary": {
+        "$value": "{color.base.white}",
+        "$extensions": { "mode": { "light": "{color.base.white}", "dark": "{color.gray.950}" } }
+      }
     }
+  }
 }
 ```
 
@@ -65,28 +65,28 @@ variable names.
 
 ```json
 {
-    "variableCollections": [
-        {
-            "id": "c1",
-            "name": "Color modes",
-            "modes": [
-                { "modeId": "1:0", "name": "Light" },
-                { "modeId": "1:1", "name": "Dark" }
-            ]
-        }
-    ],
-    "variables": [
-        {
-            "id": "v1",
-            "name": "Background/bg-primary",
-            "resolvedType": "COLOR",
-            "variableCollectionId": "c1",
-            "valuesByMode": {
-                "1:0": { "r": 1, "g": 1, "b": 1, "a": 1 },
-                "1:1": { "type": "VARIABLE_ALIAS", "id": "v2" }
-            }
-        }
-    ]
+  "variableCollections": [
+    {
+      "id": "c1",
+      "name": "Color modes",
+      "modes": [
+        { "modeId": "1:0", "name": "Light" },
+        { "modeId": "1:1", "name": "Dark" }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "id": "v1",
+      "name": "Background/bg-primary",
+      "resolvedType": "COLOR",
+      "variableCollectionId": "c1",
+      "valuesByMode": {
+        "1:0": { "r": 1, "g": 1, "b": 1, "a": 1 },
+        "1:1": { "type": "VARIABLE_ALIAS", "id": "v2" }
+      }
+    }
+  ]
 }
 ```
 
@@ -97,10 +97,10 @@ Lowercase `value` and `type`, sets listed in `$metadata.tokenSetOrder`, aliases 
 
 ```json
 {
-    "global": { "colors": { "violet": { "600": { "value": "#7c3aed", "type": "color" } } } },
-    "light": { "bg": { "accent": { "value": "{colors.violet.600}", "type": "color" } } },
-    "dark": { "bg": { "accent": { "value": "$colors.violet.400", "type": "color" } } },
-    "$metadata": { "tokenSetOrder": ["global", "light", "dark"] }
+  "global": { "colors": { "violet": { "600": { "value": "#7c3aed", "type": "color" } } } },
+  "light": { "bg": { "accent": { "value": "{colors.violet.600}", "type": "color" } } },
+  "dark": { "bg": { "accent": { "value": "$colors.violet.400", "type": "color" } } },
+  "$metadata": { "tokenSetOrder": ["global", "light", "dark"] }
 }
 ```
 
@@ -135,8 +135,8 @@ Example output for the W3C fixture: [`src/generator/__snapshots__/w3c.theme.css`
 ### Using the export
 
 ```css
-@import "tailwindcss";
-@import "./theme.css";
+@import 'tailwindcss';
+@import './theme.css';
 
 /* Only needed without @eylulg/ui, which already defines it. */
 @custom-variant dark (&:where(.dark-mode, .dark-mode *));
