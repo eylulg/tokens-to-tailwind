@@ -18,26 +18,29 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
+            - uses: actions/checkout@v7
+            - uses: actions/setup-node@v7
               with:
                   node-version-file: .nvmrc
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v7
               with:
                   repository: eylulg/ui
                   path: ui-src
             - name: Build @eylulg/ui
-              working-directory: ui-src
+              # package.json depends on file:../ui. Checkout cannot write outside the workspace,
+              # so the library is checked out here and moved up a level.
               run: |
-                  npm ci
-                  npm run build
-            - name: Link the checked out library
-              # package.json says file:../ui for local work; CI cannot reach a sibling folder.
-              run: npm install --no-audit --no-fund ./ui-src
+                  mv ui-src ../ui
+                  npm --prefix ../ui ci
+                  npm --prefix ../ui run build
+            # install-links copies the library in, as the local relink does. A symlink would give
+            # TypeScript two copies of the React types. npm ci cannot be used: the lockfile records a link.
+            - name: Install the app against the built library
+              run: npm install --no-audit --no-fund --install-links
             - run: npm test
             - run: npm run build
-            - uses: actions/configure-pages@v5
-            - uses: actions/upload-pages-artifact@v3
+            - uses: actions/configure-pages@v6
+            - uses: actions/upload-pages-artifact@v5
               with:
                   path: dist
 
@@ -49,4 +52,4 @@ jobs:
             url: ${{ steps.deployment.outputs.page_url }}
         steps:
             - id: deployment
-              uses: actions/deploy-pages@v4
+              uses: actions/deploy-pages@v5
