@@ -13,9 +13,19 @@ const color = (name: string, value: string, mode?: 'light' | 'dark'): Token => (
 describe('buildPreview', () => {
   it('re-declares the library semantic variables inside the scope', () => {
     const { css } = buildPreview([], '#p', {});
-    expect(css).toContain('--ui-bg-brand-solid: var(--color-brand-600);');
+    expect(css).toContain('--ui-bg-brand-solid:');
     expect(css).toMatch(/\n#p\.dark-mode \{/);
     expect(css).not.toContain('.dark-mode #p');
+  });
+
+  it('sets the light brand seed from the brand scale of the tokens', () => {
+    const { css } = buildPreview([color('primary.600', '#7c3aed')], '#p', { colorFormat: 'hex' });
+    expect(css).toContain('--color-brand-seed: var(--color-brand-600);');
+  });
+
+  it('sets the dark brand seed from the brand scale of the tokens', () => {
+    const { css } = buildPreview([color('primary.300', '#c4b5fd')], '#p', { colorFormat: 'hex' });
+    expect(css).toContain('--color-brand-seed-dark: var(--color-brand-300);');
   });
 
   it('maps a primary scale and single semantic colors to library roles', () => {
