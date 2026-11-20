@@ -70,6 +70,8 @@
     --shadow-lg: 0px 12px 16px -4px #10182814, 0px 4px 6px -2px #10182808;
 
     /* Mapped to @eylulg/ui roles */
+    --color-brand-seed: var(--color-brand-600);
+    --color-brand-seed-dark: var(--color-brand-300);
     --font-sans: var(--font-body);
 }
 
@@ -137,6 +139,8 @@
     --shadow-lg: 0px 12px 16px -4px #10182814, 0px 4px 6px -2px #10182808;
 
     /* Mapped to @eylulg/ui roles */
+    --color-brand-seed: var(--color-brand-600);
+    --color-brand-seed-dark: var(--color-brand-300);
     --font-sans: var(--font-body);
 }
 

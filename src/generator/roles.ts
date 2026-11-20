@@ -137,6 +137,14 @@ export function roleMappings(declarations: Declaration[]): RoleMappings {
     }
   }
 
+  // The library fills brand roles from two seeds, not from scale steps.
+  if (hasScale('brand') || theme.some((d) => d.name.startsWith('--color-brand-'))) {
+    theme.push(
+      { name: '--color-brand-seed', value: 'var(--color-brand-600)' },
+      { name: '--color-brand-seed-dark', value: 'var(--color-brand-300)' },
+    );
+  }
+
   const surface = firstMatch(
     /^--color-(.*-)?(bg|background|surface|canvas)(-primary|-default|-canvas)?$/,
   );
