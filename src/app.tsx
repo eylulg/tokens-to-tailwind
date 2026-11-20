@@ -1,11 +1,4 @@
-import {
-  AppShell,
-  BrandMark,
-  ProjectSwitcher,
-  SiteFooter,
-  ThemeToggle,
-  TopNav,
-} from '@eylulg/ui/chrome';
+import { AppShell, SiteFooter, ThemeToggle, TopNav } from '@eylulg/ui/chrome';
 import { PageHeader } from '@eylulg/ui/page-header';
 import { Tab, TabList, TabPanel, Tabs } from '@eylulg/ui/tabs';
 import { ExportTab } from '@/features/export/export-tab';
@@ -21,19 +14,7 @@ export function App() {
 
   return (
     <AppShell
-      header={
-        <TopNav
-          productName='Tokens to Tailwind'
-          logo={<BrandMark />}
-          homeHref='.'
-          actions={
-            <>
-              <ProjectSwitcher currentId={PROJECT_ID} />
-              <ThemeToggle />
-            </>
-          }
-        />
-      }
+      header={<TopNav productName='Tokens to Tailwind' homeHref='.' actions={<ThemeToggle />} />}
       footer={<SiteFooter currentId={PROJECT_ID} />}
     >
       <div className='mx-auto flex max-w-6xl flex-col gap-8'>
